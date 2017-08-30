@@ -16,8 +16,13 @@ class Card extends Component {
     super(...arguments);
     this.state = {
       showDetails: false
-    }
+    };
   }
+
+  toggleDetails() {
+    this.setState({showDetails: !this.state.showDetails});
+  }
+
   render() {
 
     let cardDetails;
@@ -31,11 +36,22 @@ class Card extends Component {
       )
     }
 
+    let sidecolor = {
+      position: 'absolute',
+      zIndex: -1,
+      top: 0,
+      bottom: 0,
+      left: 0,
+      width: 7,
+      backgroundColor: this.props.color,
+    }
+
     return(
       <div className="card">
-        <div className="card__title" onClick={
-          () => this.setState({showDetails: !this.state.showDetails})
-        }>
+        <div style={sidecolor}/>
+        <div
+          className={this.state.showDetails ? 'card__title card__title--is-open' : 'card__title'}
+          onClick={this.toggleDetails.bind(this)}>
           {this.props.title}</div>
         <div className="card__details">
           {this.props.description}

@@ -8,8 +8,24 @@
 // cardDetails라는 로컬 변수를 선언하고,
 // showDetails 상태가 true 일때만 cardDetails에 실제 데이터를 할당함
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import CheckList from './CheckList';
+
+// 커스텀 propTYpes 유효성 검사기
+// 유효성 검사기는 기본적으로
+// '속성의 리스트, 검사할 속성의 이름, 컴포넌트의 이름'을 받는 함수
+// 검사한 속성이 유효한 경우 아무것도 반환하지 않으며,
+// 속성이 잘못된 경우 Error 인스턴스를 반환해야 한다.
+let titlePropType = (props, propName, componentName) => {
+  if (props[propName]) {
+    let value = props[propName];
+    if (typeof value !== 'string' || value.length > 80) {
+      return new Error(
+        `${propName} in ${componentName} is longer than 80 characters`
+      );
+    }
+  }
+};
 
 class Card extends Component {
   constructor() {
@@ -31,7 +47,9 @@ class Card extends Component {
       cardDetails = (
         <div className="card__details">
           {this.props.description}
-          <CheckList cardId={this.props.Id} tasks={this.props.tasks} />
+          <CheckList cardId={this.props.id}
+                     tasks={this.props.tasks}
+                     taskCallbacks={this.props.taskCallbacks} />
         </div>
       )
     }
@@ -52,7 +70,7 @@ class Card extends Component {
         <div
           className={this.state.showDetails ? 'card__title card__title--is-open' : 'card__title'}
           onClick={this.toggleDetails.bind(this)}>
-          {this.props.title}</div>
+          {this.props.title}1</div>
         <div className="card__details">
           {this.props.description}
           {cardDetails}
@@ -60,6 +78,15 @@ class Card extends Component {
       </div>
     )
   }
+}
+
+Card.propTypes = {
+  id: React.PropTypes.number,
+  title: titlePropType,
+  description: React.PropTypes.string,
+  color: React.PropTypes.string,
+  tasks: React.PropTypes.arrayOf(React.PropTypes.object),
+  taskCallbacks: React.PropTypes.object,
 }
 
 export default Card;

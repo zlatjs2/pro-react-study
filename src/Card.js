@@ -9,6 +9,7 @@
 // showDetails 상태가 true 일때만 cardDetails에 실제 데이터를 할당함
 
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import CheckList from './CheckList';
 
 // 커스텀 propTYpes 유효성 검사기
@@ -71,10 +72,11 @@ class Card extends Component {
           className={this.state.showDetails ? 'card__title card__title--is-open' : 'card__title'}
           onClick={this.toggleDetails.bind(this)}>
           {this.props.title}1</div>
-        <div className="card__details">
-          {this.props.description}
-          {cardDetails}
-        </div>
+        <ReactCSSTransitionGroup transitionName="toggle"
+            transitionEnterTimeout={250}
+            transitionLeaveTimeout={250}>
+            {cardDetails}
+        </ReactCSSTransitionGroup>
       </div>
     )
   }
